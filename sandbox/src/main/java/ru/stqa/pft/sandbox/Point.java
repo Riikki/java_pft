@@ -10,7 +10,7 @@ public class Point {
 		this.y= y;
 	}
 
-	public static double distance (Point p1, Point p2) {
+	public static double area(Point p1, Point p2) {
 		double cathetus1 = p1.x - p2.x;
 		double cathetus2 = p1.y - p2.y;
 
