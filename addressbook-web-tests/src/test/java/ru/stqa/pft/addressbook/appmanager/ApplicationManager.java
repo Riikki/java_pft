@@ -27,7 +27,7 @@ public class ApplicationManager {
 		wd = new FirefoxDriver();
 		wd.manage().timeouts().implicitlyWait(60, TimeUnit.SECONDS);
 		wd.get("http://localhost/addressbook/");
-		groupHelper = new GroupHelper(navigationHelper.wd);
+		groupHelper = new GroupHelper(wd);
 		navigationHelper = new NavigationHelper (wd);
 		sessionHelper = new SessionHelper(wd);
 		sessionHelper.login("admin", "secret");
