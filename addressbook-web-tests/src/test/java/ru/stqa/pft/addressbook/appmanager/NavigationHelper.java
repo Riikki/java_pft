@@ -19,9 +19,10 @@ public class NavigationHelper extends HelperBase {
 		click(By.linkText("groups"));
 	}
 
-
 	public void goToHomePage() {
-		if (isElementPresent(By.id("maintable")))
+		if (isElementPresent(By.name("maintable"))) {
+			return;
+		}
 		click(By.linkText("home"));
 	}
 }
