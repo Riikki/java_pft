@@ -6,7 +6,7 @@ import ru.stqa.pft.addressbook.model.ContactData;
 public class ContactDeletionTests extends TestBase {
 
 	@Test
-	public void ContactDeletionTests() {
+	public void testContactDeletionTests() {
 		app.getNavigationHelper().goToHomePage();
 		if (! app.getContactHelper().isThereAContact()) {
 			app.getContactHelper().createContact(new ContactData("TestFirstName", "TestMiddleName", "TestLastName", "TestNickname", "+111111111111", "test1"));
