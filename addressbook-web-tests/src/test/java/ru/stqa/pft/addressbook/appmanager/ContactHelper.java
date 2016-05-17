@@ -98,12 +98,12 @@ public class ContactHelper extends HelperBase {
 			String lastName = info.get(1).getText();
 			String firstName = info.get(2).getText();
 			int id = Integer.parseInt(element.findElement(By.tagName("input")).getAttribute("value"));
-			String[] phones = info.get(5).getText().split("\n");
+			String allPhones = info.get(5).getText();
 			String address = info.get(3).getText();
 			ContactData contact = new ContactData()
 					.withId(id)
 					.withFirstName(firstName).withLastName(lastName)
-					.withHomePhone(phones[0]).withMobilePhone(phones[1]).withWorkPhone(phones[2])
+					.withAllPhones(allPhones)
 					.withAddress(address);
 			contacts.add(contact);
 		}
