@@ -7,8 +7,11 @@ import org.openqa.selenium.support.ui.Select;
 import org.testng.Assert;
 import ru.stqa.pft.addressbook.model.ContactData;
 import ru.stqa.pft.addressbook.model.Contacts;
+import ru.stqa.pft.addressbook.tests.ContactViewContactTests;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ContactHelper extends HelperBase {
 	ContactHelper(WebDriver wd) {
@@ -48,6 +51,10 @@ public class ContactHelper extends HelperBase {
 
 	private void clickEditContact(int index) {
 		findContactById(index).findElements(By.tagName("td")).get(7).findElement(By.tagName("a")).click();
+	}
+
+	private void clickViewContact(int index) {
+		findContactById(index).findElements(By.tagName("td")).get(6).findElement(By.tagName("a")).click();
 	}
 
 	private void selectContactForDelete(ContactData contact) {
@@ -116,6 +123,8 @@ public class ContactHelper extends HelperBase {
 		clickEditContact(contact.getId());
 		String firstName = wd.findElement(By.name("firstname")).getAttribute("value");
 		String lastName = wd.findElement(By.name("lastname")).getAttribute("value");
+		String middleName = wd.findElement(By.name("middlename")).getAttribute("value");
+		String nickname = wd.findElement(By.name("nickname")).getAttribute("value");
 		String home = wd.findElement(By.name("home")).getAttribute("value");
 		String mobile = wd.findElement(By.name("mobile")).getAttribute("value");
 		String work = wd.findElement(By.name("work")).getAttribute("value");
@@ -124,8 +133,51 @@ public class ContactHelper extends HelperBase {
 		String email2 = wd.findElement(By.name("email2")).getAttribute("value");
 		String email3 = wd.findElement(By.name("email3")).getAttribute("value");
 		wd.navigate().back();
-		return new ContactData().withId(contact.getId()).withFirstName(firstName).withLastName(lastName)
+		return new ContactData().withId(contact.getId()).withFirstName(firstName).withLastName(lastName).withMiddleName(middleName).withNickName(nickname)
 				.withHomePhone(home).withMobilePhone(mobile).withWorkPhone(work).withAddress(address)
 				.withEmail1(email1).withEmail2(email2).withEmail3(email3);
+	}
+
+	public String infoFromViewPage(ContactData contact) {
+		clickViewContact(contact.getId());
+		String contactData = wd.findElement(By.cssSelector("#content")).getText().replaceAll("\\n\\n\\nMember of.*","");
+		wd.navigate().back();
+		return contactData;
+	}
+
+	public String infoFromEditFormToString(ContactData contact) {
+		ContactData contactData = infoFromEditForm(contact);
+		String delimiter = "\n";
+
+		return String.join(delimiter,
+					//First Name, MiddleName, LastName
+					String.join(" ",contactData.getFirstName(), contactData.getMiddleName(), contactData.getLastName()),
+					//NickName
+					contactData.getNickName(),
+					//Address
+					String.join("",contactData.getAddress(),delimiter),
+					//Mobile Phones
+					String.join("",Arrays.asList(String.join(": ","H",contactData.getHomePhone()),
+									String.join(": ","M",contactData.getMobilePhone()),
+									String.join(": ","W",contactData.getWorkPhone()))
+							.stream().filter((s) -> s.matches(".*\\d.*"))
+							.collect(Collectors.joining(delimiter)),delimiter),
+					//Emails
+					Arrays.asList(contactData.getGetEmail1(), contactData.getGetEmail2(),contactData.getGetEmail3())
+							.stream().filter((s) -> s.matches(".*@.*"))
+							.map(ContactHelper::createMailString)
+							.collect(Collectors.joining(delimiter))
+				) ;
+	}
+
+	private static String createMailString(String mail) {
+		String result = mail;
+
+		String[] splitedMail = mail.split("@");
+		String domain = splitedMail[splitedMail.length-1];
+		if(domain.matches("mail.*")){
+			result = String.join(" ",result,String.format("(www.%s)",domain));
+		}
+		return result;
 	}
 }
