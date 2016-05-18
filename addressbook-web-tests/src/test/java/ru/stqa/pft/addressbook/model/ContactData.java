@@ -101,6 +101,21 @@ public class ContactData {
 		return this;
 	}
 
+	public ContactData withDefaultData(){
+		this.firstname = "TestFirstName";
+		this.middlename = "TestMiddleName";
+		this.lastname = "TestLastName";
+		this.nickname = "TestNickName";
+		this.group = "TestGroup";
+		this.address = "TestCity, TestAddress 99-11/22";
+		this.mobile = "+(7)12345";
+		this.home = "222-333";
+		this.work = "444 555";
+		this.email1 = "test@gmail.com";
+		this.email2 = "test@mail.com";
+		this.email3 = "test@mail.ru";
+		return this;
+	}
 	public String getFirstName() {
 		return firstname;
 	}
@@ -145,15 +160,15 @@ public class ContactData {
 		return allMails;
 	}
 
-	public String getGetEmail1() {
+	public String getEmail1() {
 		return email1;
 	}
 
-	public String getGetEmail2() {
+	public String getEmail2() {
 		return email2;
 	}
 
-	public String getGetEmail3() {
+	public String getEmail3() {
 		return email3;
 	}
 

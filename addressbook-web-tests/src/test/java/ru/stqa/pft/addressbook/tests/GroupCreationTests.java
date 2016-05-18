@@ -26,13 +26,13 @@ public class GroupCreationTests extends TestBase {
 	public void testBadGroupCreationTests() {
 		app.goTo().group();
 		Groups before = app.group().all();
-		GroupData group = new GroupData().withName("test2`");
+		GroupData group = new GroupData().withName("test2'");
 		app.group().create(group);
 
 		assertThat(app.group().count(), equalTo(before.size()));
 		Groups after = app.group().all();
 		assertThat(after,equalTo(
-				before.withAdded(group.withId(after.stream().mapToInt((g)->g.getId()).max().getAsInt()))));
+				before.withoutAdded(group.withId(after.stream().mapToInt((g)->g.getId()).max().getAsInt()))));
 	}
 
 }

@@ -7,7 +7,6 @@ import org.openqa.selenium.support.ui.Select;
 import org.testng.Assert;
 import ru.stqa.pft.addressbook.model.ContactData;
 import ru.stqa.pft.addressbook.model.Contacts;
-import ru.stqa.pft.addressbook.tests.ContactViewContactTests;
 
 import java.util.Arrays;
 import java.util.List;
@@ -27,7 +26,13 @@ public class ContactHelper extends HelperBase {
 		type(By.name("middlename"), contactData.getMiddleName());
 		type(By.name("lastname"), contactData.getLastName());
 		type(By.name("nickname"), contactData.getNickName());
+		type(By.name("address"), contactData.getAddress());
+		type(By.name("home"), contactData.getHomePhone());
 		type(By.name("mobile"), contactData.getMobilePhone());
+		type(By.name("work"), contactData.getWorkPhone());
+		type(By.name("email"), contactData.getEmail1());
+		type(By.name("email2"), contactData.getEmail2());
+		type(By.name("email3"), contactData.getEmail3());
 
 		if (creation) {
 			new Select(wd.findElement(By.name("new_group"))).selectByVisibleText(contactData.getGroup());
@@ -163,7 +168,7 @@ public class ContactHelper extends HelperBase {
 							.stream().filter((s) -> s.matches(".*\\d.*"))
 							.collect(Collectors.joining(delimiter)),delimiter),
 					//Emails
-					Arrays.asList(contactData.getGetEmail1(), contactData.getGetEmail2(),contactData.getGetEmail3())
+					Arrays.asList(contactData.getEmail1(), contactData.getEmail2(),contactData.getEmail3())
 							.stream().filter((s) -> s.matches(".*@.*"))
 							.map(ContactHelper::createMailString)
 							.collect(Collectors.joining(delimiter))
