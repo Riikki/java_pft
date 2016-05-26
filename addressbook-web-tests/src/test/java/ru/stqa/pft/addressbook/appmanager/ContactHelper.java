@@ -156,24 +156,24 @@ public class ContactHelper extends HelperBase {
 		String delimiter = "\n";
 
 		return String.join(delimiter,
-					//First Name, MiddleName, LastName
-					String.join(" ",contactData.getFirstName(), contactData.getMiddleName(), contactData.getLastName()),
-					//NickName
-					contactData.getNickName(),
-					//Address
-					String.join("",contactData.getAddress(),delimiter),
-					//Mobile Phones
-					String.join("",Arrays.asList(String.join(": ","H",contactData.getHomePhone()),
-									String.join(": ","M",contactData.getMobilePhone()),
-									String.join(": ","W",contactData.getWorkPhone()))
-							.stream().filter((s) -> s.matches(".*\\d.*"))
-							.collect(Collectors.joining(delimiter)),delimiter),
-					//Emails
-					Arrays.asList(contactData.getEmail1(), contactData.getEmail2(),contactData.getEmail3())
-							.stream().filter((s) -> s.matches(".*@.*"))
-							.map(ContactHelper::createMailString)
-							.collect(Collectors.joining(delimiter))
-				) ;
+				//First Name, MiddleName, LastName
+				String.join(" ",contactData.getFirstName(), contactData.getMiddleName(), contactData.getLastName()),
+				//NickName
+				contactData.getNickName(),
+				//Address
+				String.join("",contactData.getAddress(),delimiter),
+				//Mobile Phones
+				String.join("",Arrays.asList(String.join(": ","H",contactData.getHomePhone()),
+						String.join(": ","M",contactData.getMobilePhone()),
+						String.join(": ","W",contactData.getWorkPhone()))
+						.stream().filter((s) -> s.matches(".*\\d.*"))
+						.collect(Collectors.joining(delimiter)),delimiter),
+				//Emails
+				Arrays.asList(contactData.getEmail1(), contactData.getEmail2(),contactData.getEmail3())
+						.stream().filter((s) -> s.matches(".*@.*"))
+						.map(ContactHelper::createMailString)
+						.collect(Collectors.joining(delimiter))
+		) ;
 	}
 
 	private static String createMailString(String mail) {
@@ -181,9 +181,44 @@ public class ContactHelper extends HelperBase {
 
 		String[] splitedMail = mail.split("@");
 		String domain = splitedMail[splitedMail.length-1];
-		if(domain.matches("mail.*")){
+		if(domain.matches("mail.*") || domain.matches("test.*")){
 			result = String.join(" ",result,String.format("(www.%s)",domain));
 		}
 		return result;
+	}
+
+	public ContactData getContactFromDataProvider(Object[] contacts) {
+		ContactData contact = new ContactData();
+		for(Object contactObject : contacts){
+			contact = (ContactData) contactObject;
+		}
+		return contact;
+	}
+
+	public int getPresentContactId(ContactData contact) {
+		Contacts allContacts = all();
+		for(ContactData existingContact: allContacts){
+			if(existingContact.hasSameData(contact)){
+				return existingContact.getId();
+			}
+		}
+		return 0;
+	}
+
+	public ContactData infoFromHomePage(ContactData contact){
+		WebElement contactRow = findContactById(contact.getId());
+		List<WebElement> info = contactRow.findElements(By.tagName("td"));
+		String lastName = info.get(1).getText();
+		String firstName = info.get(2).getText();
+		int id = Integer.parseInt(info.get(0).findElement(By.tagName("input")).getAttribute("value"));
+		String allPhones = info.get(5).getText();
+		String address = info.get(3).getText();
+		String allMails = info.get(4).getText();
+		return new ContactData()
+				.withId(id)
+				.withFirstName(firstName).withLastName(lastName)
+				.withAllPhones(allPhones)
+				.withAddress(address)
+				.withAllMails(allMails);
 	}
 }

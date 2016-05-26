@@ -2,6 +2,7 @@ package ru.stqa.pft.addressbook.tests;
 
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+import ru.stqa.pft.addressbook.dataproviders.ContactDataProvider;
 import ru.stqa.pft.addressbook.model.ContactData;
 import ru.stqa.pft.addressbook.model.GroupData;
 
@@ -14,25 +15,31 @@ import static org.hamcrest.MatcherAssert.assertThat;
 public class ContactPhoneTests extends TestBase{
 
     @BeforeMethod
-    public void ensurePreConditions(){
+    public void ensurePreConditions(Object[] contacts){
         app.goTo().home();
-        if (app.contact().all().size() == 0) {
-            app.goTo().group();
-            if (app.group().all().size() == 0) {
-                app.group().create(new GroupData().withName("TestGroup"));
-            }
-            app.goTo().home();
-            app.contact().create(new ContactData().withDefaultData());
+        ContactData contact = app.contact().getContactFromDataProvider(contacts);
+        app.goTo().group();
+        contact = app.group().ensureGroupExistAndCreate(contact);
+        app.goTo().home();
+        int existedContactId = app.contact().getPresentContactId(contact);
+        if (existedContactId == 0) {
+            app.contact().create(contact);
+            existedContactId = app.contact().getPresentContactId(contact);
+            contact.withId(existedContactId);
+        }else{
+            contact.withId(existedContactId);
         }
+        contacts[0] = contact;
     }
 
-    @Test
-    public void testContactPhones(){
+    @Test(dataProvider = "validContactsFromJson", dataProviderClass = ContactDataProvider.class)
+    public void testContactPhones(ContactData contact){
         app.goTo().home();
-        ContactData contact = app.contact().all().iterator().next();
+
+        ContactData contactInfoFromHomePage = app.contact().infoFromHomePage(contact);
         ContactData contactInfoFromEditForm = app.contact().infoFromEditForm(contact);
 
-        assertThat(contact.getAllPhones(),equalTo(mergePhones(contactInfoFromEditForm)));
+        assertThat(contactInfoFromHomePage.getAllPhones(),equalTo(mergePhones(contactInfoFromEditForm)));
     }
 
     private static String cleaned(String phone){

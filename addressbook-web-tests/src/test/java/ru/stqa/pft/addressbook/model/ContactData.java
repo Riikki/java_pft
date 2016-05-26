@@ -114,10 +114,12 @@ public class ContactData {
 		this.email1 = email1;
 		return this;
 	}
+
 	public ContactData withEmail2(String email2) {
 		this.email2 = email2;
 		return this;
 	}
+
 	public ContactData withEmail3(String email3) {
 		this.email3 = email3;
 		return this;
@@ -148,6 +150,24 @@ public class ContactData {
 		this.email3 = "test@mail.ru";
 		return this;
 	}
+
+	public ContactData withDataParams(ContactData data){
+		this.id = data.getId();
+		this.firstname = data.getFirstName();
+		this.middlename = data.getMiddleName();
+		this.lastname = data.getLastName();
+		this.nickname = data.getNickName();
+		this.group = data.getGroup();
+		this.address = data.getAddress();
+		this.mobile = data.getMobilePhone();
+		this.home = data.getHomePhone();
+		this.work = data.getWorkPhone();
+		this.email1 = data.getEmail1();
+		this.email2 = data.getEmail2();
+		this.email3 = data.getEmail3();
+		return this;
+	}
+
 	public String getFirstName() {
 		return firstname;
 	}
@@ -236,5 +256,16 @@ public class ContactData {
 		result = 31 * result + (firstname != null ? firstname.hashCode() : 0);
 		result = 31 * result + (lastname != null ? lastname.hashCode() : 0);
 		return result;
+	}
+
+	public boolean hasSameData(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+
+		ContactData that = (ContactData) o;
+
+		if (firstname != null ? !firstname.equals(that.firstname) : that.firstname != null) return false;
+		return lastname != null ? lastname.equals(that.lastname) : that.lastname == null;
+
 	}
 }

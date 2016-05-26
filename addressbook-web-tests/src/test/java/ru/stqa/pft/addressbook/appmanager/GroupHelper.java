@@ -3,12 +3,16 @@ package ru.stqa.pft.addressbook.appmanager;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import ru.stqa.pft.addressbook.model.ContactData;
 import ru.stqa.pft.addressbook.model.GroupData;
 import ru.stqa.pft.addressbook.model.Groups;
 
+import java.security.acl.Group;
 import java.util.List;
 
 public class GroupHelper extends HelperBase {
+
+	private static final String noGroupName = "other";
 
 	public GroupHelper(WebDriver wd) {
 		super(wd);
@@ -95,5 +99,55 @@ public class GroupHelper extends HelperBase {
 			groupCache.add(group);
 		}
 		return new Groups(groupCache);
+	}
+
+	public GroupData getGroupFromDataProvider(Object[] groups) {
+		GroupData group = new GroupData();
+		for(Object groupObject : groups){
+			group = (GroupData) groupObject;
+		}
+		return group;
+	}
+
+	public boolean checkIsGroupExistByName(String groupName) {
+		Groups allGroups = this.all();
+		for(GroupData group: allGroups){
+			if(group.getName().equals(groupName)){
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public ContactData ensureGroupExistAndCreate(ContactData contact) {
+		String groupName = contact.getGroup();
+		Groups allGroups = all();
+		if(allGroups.size()>0){
+			if(groupName==null){
+				groupName = allGroups.iterator().next().getName();
+				contact.withGroup(groupName);
+			}
+			if(!checkIsGroupExistByName(groupName)){
+				create(new GroupData().withName(groupName));
+			}
+		}else{
+			if(groupName != null){
+				create(new GroupData().withName(groupName));
+			}else{
+				create(new GroupData().withName(noGroupName));
+				contact.withGroup(noGroupName);
+			}
+		}
+		return contact;
+	}
+
+	public int getPresentGroupId(GroupData group) {
+		Groups allGroups = all();
+		for(GroupData existingGroup: allGroups){
+			if(existingGroup.hasSameData(group)){
+				return existingGroup.getId();
+			}
+		}
+		return 0;
 	}
 }

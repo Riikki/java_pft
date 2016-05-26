@@ -56,10 +56,10 @@ public class GroupData {
 	@Override
 	public String toString() {
 		return "GroupData{" +
-						"id='" + id + '\'' +
+				"id='" + id + '\'' +
 
-						", name='" + name + '\'' +
-						'}';
+				", name='" + name + '\'' +
+				'}';
 	}
 
 	@Override
@@ -79,4 +79,20 @@ public class GroupData {
 		return name != null ? name.hashCode() : 0;
 	}
 
+	public boolean hasSameData(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+
+		GroupData groupData = (GroupData) o;
+
+		return name != null ? name.equals(groupData.name) : groupData.name == null;
+	}
+
+	public GroupData withDataParams(GroupData group) {
+		this.id = group.getId();
+		this.name = group.getName();
+		this.header = group.getHeader();
+		this.footer = group.getFooter();
+		return this;
+	}
 }
