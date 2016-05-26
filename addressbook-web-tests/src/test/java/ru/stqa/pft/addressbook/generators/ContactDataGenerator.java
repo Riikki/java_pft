@@ -54,39 +54,39 @@ public class ContactDataGenerator {
     private void saveAsJson(List<ContactData> contacts, File file) throws IOException {
         Gson gson = new GsonBuilder().setPrettyPrinting().excludeFieldsWithoutExposeAnnotation().create();
         String json = gson.toJson(contacts);
-        Writer writer = new FileWriter(file);
-        writer.write(json);
-        writer.close();
+        try(Writer writer = new FileWriter(file)){
+            writer.write(json);
+        }
     }
 
     private void saveAsXml(List<ContactData> contacts, File file) throws IOException {
         XStream xstream = new XStream();
         xstream.processAnnotations(ContactData.class);
         String xml = xstream.toXML(contacts);
-        Writer writer = new FileWriter(file);
-        writer.write(xml);
-        writer.close();
+        try(Writer writer = new FileWriter(file)){
+            writer.write(xml);
+        }
     }
 
     private void save(List<ContactData> contacts, File file) throws IOException {
         System.out.println(new File(".").getAbsolutePath());
-        Writer writer = new FileWriter(file);
-        for (ContactData contact : contacts) {
-            String row = new StringBuilder(contact.getFirstName())
-                    .append(contact.getMiddleName())
-                    .append(contact.getLastName())
-                    .append(contact.getNickName())
-                    .append(contact.getHomePhone())
-                    .append(contact.getMobilePhone())
-                    .append(contact.getWorkPhone())
-                    .append(contact.getAddress())
-                    .append(contact.getEmail1())
-                    .append(contact.getEmail2())
-                    .append(contact.getEmail3())
-                    .toString();
-            writer.write(row);
+        try(Writer writer = new FileWriter(file)){
+            for (ContactData contact : contacts) {
+                String row = new StringBuilder(contact.getFirstName())
+                        .append(contact.getMiddleName())
+                        .append(contact.getLastName())
+                        .append(contact.getNickName())
+                        .append(contact.getHomePhone())
+                        .append(contact.getMobilePhone())
+                        .append(contact.getWorkPhone())
+                        .append(contact.getAddress())
+                        .append(contact.getEmail1())
+                        .append(contact.getEmail2())
+                        .append(contact.getEmail3())
+                        .toString();
+                writer.write(row);
+            }
         }
-        writer.close();
     }
 
     private List<ContactData> generateContacts(int count) {
