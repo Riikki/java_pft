@@ -37,8 +37,6 @@ public class ContactData {
 	private String email3;
 	@Expose
 	private String allMails;
-	@Expose
-	private String allNames;
 
 	public File getPhoto() {
 		return photo;
@@ -130,27 +128,6 @@ public class ContactData {
 		return this;
 	}
 
-	public ContactData withAllNames(String allNames) {
-		this.allNames = allNames;
-		return this;
-	}
-
-	public ContactData withDefaultData(){
-		this.firstname = "TestFirstName";
-		this.middlename = "TestMiddleName";
-		this.lastname = "TestLastName";
-		this.nickname = "TestNickName";
-		this.group = "TestGroup";
-		this.address = "TestCity, TestAddress 99-11/22";
-		this.mobile = "+(7)12345";
-		this.home = "222-333";
-		this.work = "444 555";
-		this.email1 = "test@gmail.com";
-		this.email2 = "test@mail.com";
-		this.email3 = "test@mail.ru";
-		return this;
-	}
-
 	public ContactData withDataParams(ContactData data){
 		this.id = data.getId();
 		this.firstname = data.getFirstName();
@@ -222,10 +199,6 @@ public class ContactData {
 
 	public String getEmail3() {
 		return email3;
-	}
-
-	public String getGetAllNames() {
-		return allNames;
 	}
 
 	@Override
