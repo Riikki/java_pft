@@ -3,51 +3,88 @@ package ru.stqa.pft.addressbook.model;
 import com.google.gson.annotations.Expose;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
+import org.hibernate.annotations.Type;
 
+import javax.persistence.*;
 import java.io.File;
 @XStreamAlias("contact")
+@Entity
+@Table(name = "addressbook")
 public class ContactData {
 	@XStreamOmitField
+	@Id
+	@Column(name = "id")
 	private int id;
 	@Expose
+	@Column(name = "firstname")
 	private String firstname;
 	@Expose
+	@Column(name = "middlename")
 	private String middlename;
 	@Expose
+	@Column(name = "lastname")
 	private String lastname;
 	@Expose
+	@Column(name = "nickname")
 	private String nickname;
 	@Expose
+	@Type(type = "text")
+	@Column(name = "home")
 	private String home;
 	@Expose
+	@Type(type = "text")
+	@Column(name = "mobile")
 	private String mobile;
 	@Expose
+	@Type(type = "text")
+	@Column(name = "work")
 	private String work;
 	@Expose
+	@Transient
 	private String group;
 	@Expose
+	@Transient
 	private String allPhones;
 	@Expose
+	@Column(name = "address")
+	@Type(type = "text")
 	private String address;
 	@Expose
+	@Type(type = "text")
+	@Column(name = "email")
 	private String email1;
 	@Expose
+	@Type(type = "text")
+	@Column(name = "email2")
 	private String email2;
 	@Expose
+	@Type(type = "text")
+	@Column(name = "email3")
 	private String email3;
 	@Expose
+	@Transient
 	private String allMails;
+	@Column(name = "photo")
+	@Type(type = "text")
+	private String photo;
 
 	public File getPhoto() {
-		return photo;
+		return new File(photo);
+	}
+
+	@Override
+	public String toString() {
+		return "ContactData{" +
+				"id=" + id +
+				", firstname='" + firstname + '\'' +
+				", lastname='" + lastname + '\'' +
+				'}';
 	}
 
 	public ContactData withPhoto(File photo) {
-		this.photo = photo;
+		this.photo = photo.getPath();
 		return this;
 	}
-
-	private File photo;
 
 	public int getId() {
 		return id;
@@ -199,15 +236,6 @@ public class ContactData {
 
 	public String getEmail3() {
 		return email3;
-	}
-
-	@Override
-	public String toString() {
-		return "ContactData{" +
-				"id=" + id +
-				", firstname='" + firstname + '\'' +
-				", lastname='" + lastname + '\'' +
-				'}';
 	}
 
 	@Override
