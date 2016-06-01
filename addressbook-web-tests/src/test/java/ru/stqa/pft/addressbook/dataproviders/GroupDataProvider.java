@@ -6,10 +6,7 @@ import com.thoughtworks.xstream.XStream;
 import org.testng.annotations.DataProvider;
 import ru.stqa.pft.addressbook.model.GroupData;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -45,4 +42,17 @@ public class GroupDataProvider {
         return groups.stream().map((g) -> new Object[] {g}).collect(Collectors.toList()).iterator();
     }
 
+    public GroupData oneGroupFromJson() throws IOException {
+        BufferedReader reader = new BufferedReader(new FileReader(new File("src/test/resources/groups.json")));
+        String json = "";
+        String line = reader.readLine();
+        while (line != null) {
+            json += line;
+            line = reader.readLine();
+        }
+        Gson gson = new Gson();
+        List<GroupData> groups = gson.fromJson(json,new TypeToken<List<GroupData>>(){}.getType());
+        GroupData group = groups.get(0);
+        return group;
+    }
 }
