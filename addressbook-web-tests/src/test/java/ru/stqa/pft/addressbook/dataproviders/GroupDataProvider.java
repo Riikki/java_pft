@@ -42,7 +42,7 @@ public class GroupDataProvider {
         return groups.stream().map((g) -> new Object[] {g}).collect(Collectors.toList()).iterator();
     }
 
-    public GroupData oneGroupFromJson() throws IOException {
+    public GroupData getOneGroupFromJson() throws IOException {
         BufferedReader reader = new BufferedReader(new FileReader(new File("src/test/resources/groups.json")));
         String json = "";
         String line = reader.readLine();

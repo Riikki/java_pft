@@ -33,15 +33,56 @@ public class DbHelper {
         return new Groups(result);
     }
 
-//    public Contacts contacts(){
-//        Session session = sessionFactory.openSession();
-//        session.beginTransaction();
-//        List result = session.createQuery( "from ContactData where deprecated = null" ).list();
-//        Contacts
-//        for ( ContactData group : (List<ContactData>) result ) {
-//            System.out.println(group);
-//        }
-//        session.getTransaction().commit();
-//        session.close();
-//    }
+    public GroupData groupByName(String groupName){
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        List result = session.createQuery( "from GroupData where group_name = '" + groupName + "'").list();
+        session.close();
+
+        if(result.size() == 0){
+            return null;
+        }
+        return (GroupData) result.get(0);
+    }
+
+    public Contacts contacts(){
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        List result = session.createQuery( "from ContactData where deprecated = null" ).list();
+        return new Contacts(result);
+    }
+
+    public ContactData getContact(ContactData contact){
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+
+        List result = session.createQuery( "from ContactData where deprecated = null AND firstname = '" + contact.getFirstName() + "'AND lastname = '" + contact.getLastName() + "'").list();
+        session.close();
+
+        if(result.size() == 0){
+            return null;
+        }
+        return (ContactData) result.get(0);
+    }
+
+    public void createGroup(GroupData group) {
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+
+        session.save(group);
+
+        session.getTransaction().commit();
+        session.close();
+    }
+
+    public void createContact(ContactData contact) {
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+
+        session.save(contact);
+
+        session.getTransaction().commit();
+        session.close();
+    }
+
 }

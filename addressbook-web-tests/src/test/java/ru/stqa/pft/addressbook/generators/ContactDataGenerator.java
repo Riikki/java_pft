@@ -96,6 +96,7 @@ public class ContactDataGenerator {
                     .withMiddleName(String.format("TestMiddleName %s",i))
                     .withLastName(String.format("TestLastName %s",i))
                     .withNickName(String.format("TestNickName %s",i))
+                    .withGroup(String.format("TestGroup %s",i))
                     .withHomePhone(String.format("111 %1$s%1$s%1$s",i))
                     .withMobilePhone(String.format("+7(111) %1$s%1$s%1$s",i))
                     .withWorkPhone(String.format("111-%1$s%1$s%1$s",i))

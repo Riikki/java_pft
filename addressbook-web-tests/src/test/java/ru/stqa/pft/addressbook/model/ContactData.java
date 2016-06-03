@@ -3,6 +3,7 @@ package ru.stqa.pft.addressbook.model;
 import com.google.gson.annotations.Expose;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
+import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
@@ -13,6 +14,8 @@ import java.io.File;
 public class ContactData {
 	@XStreamOmitField
 	@Id
+	@GenericGenerator(name="kaugen" , strategy="increment")
+	@GeneratedValue(generator="kaugen")
 	@Column(name = "id")
 	private int id;
 	@Expose
@@ -67,6 +70,18 @@ public class ContactData {
 	@Column(name = "photo")
 	@Type(type = "text")
 	private String photo;
+	@Column(name = "bday", columnDefinition = "TINYINT")
+	private  int bday = 0;
+
+	@Column(name = "aday", columnDefinition = "TINYINT")
+	private  int aday = 0;
+
+	private String company = "",title = "", bmonth="", byear="",amonth="", ayear="";
+
+	@Type(type = "text")
+	private String fax = "", im="",im2="",im3="",homepage="",address2="",phone2="",notes="";
+
+
 
 	public File getPhoto() {
 		return new File(photo);
@@ -162,23 +177,6 @@ public class ContactData {
 
 	public ContactData withAllMails(String allMails) {
 		this.allMails = allMails;
-		return this;
-	}
-
-	public ContactData withDataParams(ContactData data){
-		this.id = data.getId();
-		this.firstname = data.getFirstName();
-		this.middlename = data.getMiddleName();
-		this.lastname = data.getLastName();
-		this.nickname = data.getNickName();
-		this.group = data.getGroup();
-		this.address = data.getAddress();
-		this.mobile = data.getMobilePhone();
-		this.home = data.getHomePhone();
-		this.work = data.getWorkPhone();
-		this.email1 = data.getEmail1();
-		this.email2 = data.getEmail2();
-		this.email3 = data.getEmail3();
 		return this;
 	}
 

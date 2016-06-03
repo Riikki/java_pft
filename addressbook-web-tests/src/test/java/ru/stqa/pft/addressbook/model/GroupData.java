@@ -5,12 +5,10 @@ import com.google.gson.annotations.Expose;
 import com.oracle.webservices.internal.api.EnvelopeStyle;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
+import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @XStreamAlias("group")
 @Entity
@@ -41,6 +39,8 @@ public class GroupData {
 
 	@XStreamOmitField
 	@Id
+	@GenericGenerator(name="kaugen" , strategy="increment")
+	@GeneratedValue(generator="kaugen")
 	@Column(name = "group_id")
 	private int id;
 	@Expose
@@ -108,13 +108,5 @@ public class GroupData {
 		GroupData groupData = (GroupData) o;
 
 		return name != null ? name.equals(groupData.name) : groupData.name == null;
-	}
-
-	public GroupData withDataParams(GroupData group) {
-		this.id = group.getId();
-		this.name = group.getName();
-		this.header = group.getHeader();
-		this.footer = group.getFooter();
-		return this;
 	}
 }

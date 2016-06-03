@@ -27,22 +27,28 @@ import static org.hamcrest.MatcherAssert.assertThat;
 public class ContactCreationTests extends TestBase {
 
 	@BeforeMethod
-	public void ensurePreConditions(Object[] contacts) {
-		ContactData contact = app.contact().getContactFromDataProvider(contacts);
-		app.goTo().group();
-		contact = app.group().ensureGroupExistAndCreate(contact);
+	public void ensurePreConditions() throws IOException {
+		Contacts contacts = new ContactDataProvider().getContactsFromJson();
+		for (ContactData contactData : contacts) {
+			GroupData group = app.db().groupByName(contactData.getGroup());
+			if (group == null) {
+				group = new GroupData().withName(contactData.getGroup()).withHeader("").withFooter("");
+				app.db().createGroup(group);
+			}
+		}
 		app.goTo().home();
-
-		contacts[0] = contact;
 	}
 
 	@Test(dataProvider = "validContactsFromJson", dataProviderClass = ContactDataProvider.class)
 	public void testContactCreationTests(ContactData contact) {
-		Contacts before = app.contact().all();
-		app.contact().create(contact);
-		Contacts after = app.contact().all();
+		Contacts before = app.db().contacts();
 
-		assertThat(after.size(),equalTo(before.size() + 1));
+		if(contact.getGroup() == null){
+			contact.withGroup(app.db().groups().iterator().next().getName());
+		}
+		app.contact().create(contact);
+		Contacts after = app.db().contacts();
+
 		assertThat(after,equalTo(
 				before.withAdded(contact.withId(after.stream().mapToInt((g)->g.getId()).max().getAsInt()))));
 	}

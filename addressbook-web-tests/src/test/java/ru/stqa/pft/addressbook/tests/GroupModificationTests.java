@@ -17,7 +17,7 @@ public class GroupModificationTests extends TestBase {
 	public void ensurePreCondition() throws IOException {
 		app.goTo().group();
 		if(app.db().groups().size() == 0){
-			GroupData group = new GroupDataProvider().oneGroupFromJson();
+			GroupData group = new GroupDataProvider().getOneGroupFromJson();
 			app.group().create(new GroupData().withName(group.getName()).withHeader(group.getHeader()).withFooter(group.getFooter()));
 		}
 	}
