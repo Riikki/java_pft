@@ -65,7 +65,7 @@ public class ContactHelper extends HelperBase {
 		findContactById(index).findElements(By.tagName("td")).get(6).findElement(By.tagName("a")).click();
 	}
 
-	private void selectContactForDelete(ContactData contact) {
+	private void selectContactCheckbox(ContactData contact) {
 		findContactById(contact.getId()).findElement(By.cssSelector(String.format("input[value='%s']",contact.getId()))).click();
 	}
 
@@ -81,7 +81,7 @@ public class ContactHelper extends HelperBase {
 	}
 
 	public void delete(ContactData contact) {
-		selectContactForDelete(contact);
+		selectContactCheckbox(contact);
 		deleteSelected();
 		goHome();
 	}
@@ -225,13 +225,23 @@ public class ContactHelper extends HelperBase {
 	}
 
 	public void addToGroup(ContactData contact, GroupData group) {
-		selectContactForDelete(contact);
-		addToGroup(group);
+		selectContactCheckbox(contact);
+		addToGroupAction(group);
 		goHome();
 	}
 
-	private void addToGroup(GroupData group) {
+	private void addToGroupAction(GroupData group) {
 		new Select(wd.findElement(By.name("to_group"))).selectByVisibleText(group.getName());
 		click(By.name("add"));
+	}
+
+	public void removeFromGroup(ContactData contact, GroupData group) {
+		selectContactCheckbox(contact);
+		removeFromGroupAction();
+		goHome();
+	}
+
+	private void removeFromGroupAction() {
+		click(By.name("remove"));
 	}
 }
