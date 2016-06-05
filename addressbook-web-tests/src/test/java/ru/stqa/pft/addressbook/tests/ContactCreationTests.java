@@ -28,14 +28,6 @@ public class ContactCreationTests extends TestBase {
 
 	@BeforeMethod
 	public void ensurePreConditions() throws IOException {
-		Contacts contacts = new ContactDataProvider().getContactsFromJson();
-		for (ContactData contactData : contacts) {
-			GroupData group = app.db().groupByName(contactData.getGroup());
-			if (group == null) {
-				group = new GroupData().withName(contactData.getGroup()).withHeader("").withFooter("");
-				app.db().createGroup(group);
-			}
-		}
 		app.goTo().home();
 	}
 
@@ -43,9 +35,6 @@ public class ContactCreationTests extends TestBase {
 	public void testContactCreationTests(ContactData contact) {
 		Contacts before = app.db().contacts();
 
-		if(contact.getGroup() == null){
-			contact.withGroup(app.db().groups().iterator().next().getName());
-		}
 		app.contact().create(contact);
 		Contacts after = app.db().contacts();
 

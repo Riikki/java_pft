@@ -47,7 +47,7 @@ public class ContactDataProvider {
 
     }
 
-    public Contacts getContactsFromJson() throws IOException {
+    public ContactData getOneContactFromJson() throws IOException {
         try(BufferedReader reader = new BufferedReader(new FileReader(new File("src/test/resources/contacts.json")))){
             String json = "";
             String line = reader.readLine();
@@ -57,7 +57,7 @@ public class ContactDataProvider {
             }
             Gson gson = new Gson();
             List<ContactData> contacts = gson.fromJson(json,new TypeToken<List<ContactData>>(){}.getType());
-            return new Contacts(contacts);
+            return contacts.get(0);
         }
     }
 }

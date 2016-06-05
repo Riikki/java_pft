@@ -20,6 +20,7 @@ public class GroupDeletionTests extends TestBase {
 			GroupData group = new GroupDataProvider().getOneGroupFromJson();
 			app.group().create(new GroupData().withName(group.getName()).withHeader(group.getHeader()).withFooter(group.getFooter()));
 		}
+		app.goTo().group();
 	}
 
 	@Test

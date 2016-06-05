@@ -14,36 +14,30 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 public class ContactDeletionTests extends TestBase {
 
+	private ContactData contact;
+
 	@BeforeMethod
 	public void ensurePreConditions() throws IOException {
-		Contacts contacts = new ContactDataProvider().getContactsFromJson();
-		for (ContactData contactData : contacts) {
-			ContactData contact = app.db().getContact(contactData);
-			if (contact == null) {
-				GroupData group = app.db().groupByName(contactData.getGroup());
-				if (group == null) {
-					group = new GroupData().withName(contactData.getGroup());
-					app.db().createGroup(group);
-				}
-				contact = new ContactData().withFirstName(contactData.getFirstName()).withMiddleName(contactData.getMiddleName())
-						.withLastName(contactData.getLastName()).withNickName(contactData.getNickName()).withGroup(contactData.getGroup()).withAddress(contactData.getAddress())
-						.withHomePhone(contactData.getHomePhone()).withWorkPhone(contactData.getWorkPhone()).withMobilePhone(contactData.getMobilePhone())
-						.withEmail1(contactData.getEmail1()).withEmail2(contactData.getEmail2()).withEmail3(contactData.getEmail3())
-						.withPhoto(contactData.getPhoto());
-				app.db().createContact(contact);
-			}
+		Contacts contacts = app.db().contacts();
+		if(contacts.size()>0){
+			this.contact = contacts.iterator().next();
+		}else{
+			ContactData contact = new ContactDataProvider().getOneContactFromJson();
+			app.db().createContact(contact);
+			this.contact = app.db().getContact(contact);
+
 		}
 		app.goTo().home();
 	}
-	@Test(dataProvider = "validContactsFromJson", dataProviderClass = ContactDataProvider.class)
-	public void testContactDeletionTests(ContactData contact) {
+
+	@Test
+	public void testContactDeletionTests() {
 		Contacts before = app.db().contacts();
 
-		ContactData contactData = app.db().getContact(contact);
-		contact.withId(contactData.getId());
+		ContactData contact = this.contact;
 		app.contact().delete(contact);
-		Contacts after = app.db().contacts();
 
+		Contacts after = app.db().contacts();
 		assertThat(after,equalTo(
 				before.withoutAdded(contact)));
 	}

@@ -1,5 +1,6 @@
 package ru.stqa.pft.addressbook.appmanager;
 
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.MetadataSources;
@@ -84,5 +85,4 @@ public class DbHelper {
         session.getTransaction().commit();
         session.close();
     }
-
 }

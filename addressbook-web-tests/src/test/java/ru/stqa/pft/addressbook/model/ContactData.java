@@ -8,6 +8,7 @@ import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.io.File;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -74,6 +75,7 @@ public class ContactData {
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name="address_in_groups", joinColumns = @JoinColumn(name = "id"), inverseJoinColumns = @JoinColumn(name="group_id"))
 	private Set<GroupData> groups = new HashSet<GroupData>();
+
 	@Column(name = "bday", columnDefinition = "TINYINT")
 	private  int bday = 0;
 
@@ -176,6 +178,11 @@ public class ContactData {
 
 	public ContactData withAllMails(String allMails) {
 		this.allMails = allMails;
+		return this;
+	}
+
+	public ContactData inGroup(GroupData group){
+		groups.add(group);
 		return this;
 	}
 

@@ -16,21 +16,10 @@ public class ContactModificationTests extends TestBase {
 
 	@BeforeMethod
 	public void ensurePreConditions() throws IOException {
-		Contacts contacts = new ContactDataProvider().getContactsFromJson();
-		for (ContactData contactData : contacts) {
-			ContactData contact = app.db().getContact(contactData);
-			if (contact == null) {
-				GroupData group = app.db().groupByName(contactData.getGroup());
-				if (group == null) {
-					group = new GroupData().withName(contactData.getGroup()).withHeader("").withFooter("");
-					app.db().createGroup(group);
-				}
-				contact = new ContactData().withFirstName(contactData.getFirstName()).withMiddleName(contactData.getMiddleName())
-						.withLastName(contactData.getLastName()).withNickName(contactData.getNickName()).withGroup(contactData.getGroup()).withAddress(contactData.getAddress())
-						.withHomePhone(contactData.getHomePhone()).withWorkPhone(contactData.getWorkPhone()).withMobilePhone(contactData.getMobilePhone())
-						.withEmail1(contactData.getEmail1()).withEmail2(contactData.getEmail2()).withEmail3(contactData.getEmail3());
-				app.db().createContact(contact);
-			}
+		Contacts contacts = app.db().contacts();
+		if(contacts.size() == 0){
+			ContactData contact = new ContactDataProvider().getOneContactFromJson();
+			app.db().createContact(contact);
 		}
 		app.goTo().home();
 	}

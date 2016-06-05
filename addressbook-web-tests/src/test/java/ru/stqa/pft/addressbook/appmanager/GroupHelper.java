@@ -119,27 +119,27 @@ public class GroupHelper extends HelperBase {
 		return false;
 	}
 
-	public ContactData ensureGroupExistAndCreate(ContactData contact) {
-		String groupName = contact.getGroup();
-		Groups allGroups = all();
-		if(allGroups.size()>0){
-			if(groupName==null){
-				groupName = allGroups.iterator().next().getName();
-				contact.withGroup(groupName);
-			}
-			if(!checkIsGroupExistByName(groupName)){
-				create(new GroupData().withName(groupName));
-			}
-		}else{
-			if(groupName != null){
-				create(new GroupData().withName(groupName));
-			}else{
-				create(new GroupData().withName(noGroupName));
-				contact.withGroup(noGroupName);
-			}
-		}
-		return contact;
-	}
+//	public ContactData ensureGroupExistAndCreate(ContactData contact) {
+//		String groupName = contact.getGroup();
+//		Groups allGroups = all();
+//		if(allGroups.size()>0){
+//			if(groupName==null){
+//				groupName = allGroups.iterator().next().getName();
+//				contact.withGroup(groupName);
+//			}
+//			if(!checkIsGroupExistByName(groupName)){
+//				create(new GroupData().withName(groupName));
+//			}
+//		}else{
+//			if(groupName != null){
+//				create(new GroupData().withName(groupName));
+//			}else{
+//				create(new GroupData().withName(noGroupName));
+//				contact.withGroup(noGroupName);
+//			}
+//		}
+//		return contact;
+//	}
 
 	public int getPresentGroupId(GroupData group) {
 		Groups allGroups = all();

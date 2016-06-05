@@ -1,5 +1,6 @@
 package ru.stqa.pft.addressbook.tests;
 
+import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 import ru.stqa.pft.addressbook.dataproviders.GroupDataProvider;
 import ru.stqa.pft.addressbook.model.GroupData;
@@ -13,6 +14,7 @@ public class GroupCreationTests extends TestBase {
 	@Test (dataProvider = "validGroupsFromJson", dataProviderClass = GroupDataProvider.class)
 	public void testGroupCreationTests(GroupData group) {
 		app.goTo().group();
+
 		Groups before = app.db().groups();
 
 		app.group().create(group);
@@ -27,6 +29,7 @@ public class GroupCreationTests extends TestBase {
 	@Test(enabled = false, dataProvider = "validGroupsFromJson", dataProviderClass = GroupDataProvider.class)
 	public void testBadGroupCreationTests(GroupData group) {
 		app.goTo().group();
+
 		Groups before = app.db().groups();
 
 		app.group().create(group);
