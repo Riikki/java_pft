@@ -9,6 +9,8 @@ import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @XStreamAlias("group")
 @Entity
@@ -54,6 +56,13 @@ public class GroupData {
 	@Column(name = "group_footer")
 	@Type(type = "text")
 	private String footer;
+
+	@ManyToMany(mappedBy = "groups")
+	private Set<ContactData> contacts = new HashSet<ContactData>();
+
+	public Contacts getContacts() {
+		return new Contacts(contacts);
+	}
 
 	public int getId() {
 		return id;
