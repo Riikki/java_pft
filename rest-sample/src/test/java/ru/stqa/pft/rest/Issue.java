@@ -5,6 +5,7 @@ public class Issue {
     private int id;
     private String subject;
     private String description;
+    private int state;
 
     public int getId() {
         return id;
@@ -52,6 +53,15 @@ public class Issue {
 
     public Issue withDescription(String description) {
         this.description = description;
+        return this;
+    }
+
+    public int getState() {
+        return state;
+    }
+
+    public Issue withState(int state) {
+        this.state = state;
         return this;
     }
 }
